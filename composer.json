@@ -17,7 +17,6 @@
         "league/glide": "^2.2",
         "league/glide-symfony": "^2.0",
         "liip/imagine-bundle": "^2.11.0",
-        "sensio/framework-extra-bundle": "^6.2",
         "symfony/apache-pack": "^1.0",
         "symfony/asset": "^6.3",
         "symfony/config": "^6.3",
