@@ -1,3 +1,4 @@
+/public/.htaccess
 /.idea/
 ###> symfony/framework-bundle ###
 /.env
