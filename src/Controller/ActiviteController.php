@@ -24,7 +24,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ActiviteController extends AbstractController
 {
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
 
     public function __construct(EntityManagerInterface $entityManager)
     {
@@ -34,7 +34,9 @@ class ActiviteController extends AbstractController
     /**
      * Cette méthode est en charge de rediriger l'utilisateur sur la page Programme,
      * d'afficher les activités avec un état 'ouvert' ou 'modifier' et d'afficher un filtre.
-     * 
+     *
+     * @param EntityManagerInterface $entityManager
+     * @param IntroPhotoRepository $introPhotoRepository
      * @param ActiviteRepository $activiteRepository
      * @param Request $request
      * @return Response
@@ -105,9 +107,10 @@ class ActiviteController extends AbstractController
 
     /**
      * Cette méthode sert à créer une activité.
-     * 
+     *
      * @param Request $request
      * @param EtatRepository $etatRepository
+     * @param EntityManagerInterface $entityManager
      * @return Response
      */
 
@@ -166,6 +169,36 @@ class ActiviteController extends AbstractController
     }
 
     /**
+     * Cette méthode affiche les détails d'une activité.
+     *
+     * @param Activite $activite
+     * @param IntroPhotoRepository $introPhotoRepository
+     * @return Response
+     */
+    #[\Symfony\Component\Routing\Attribute\Route('/detail/{id}', name : 'activite_detail', methods : ['GET'])]
+
+    public function detail(Activite $activite, IntroPhotoRepository $introPhotoRepository): Response
+    {
+        //On récupère l'utilisateur en session et on le stocke dans la variable $user
+        $user = $this->getUser();
+
+        // Récupération de la photo introductive du programme
+        $photoIntroProgramme = $introPhotoRepository->find("1");
+
+        // Création du formulaire pour la photo introductive du programme
+        $formPhotoIntro = $this->createForm(ProgrammeIntroPhotoType::class, $photoIntroProgramme);
+
+        return $this->render('activite/show.html.twig', [
+            'user' => $user,
+            'activite' => $activite,
+            'photoIntro' => $photoIntroProgramme->getProgrammePhotoIntro(),
+            'formPhotoIntro' => $formPhotoIntro->createView(),
+        ]);
+    }
+
+
+
+    /**
      * @param Activite $activite
      * @return Response
      */
@@ -181,7 +214,7 @@ class ActiviteController extends AbstractController
 
     /**
      * Cette méthode permet d'afficher le pdf de l'activité s'il est présent
-     * 
+     *
      * @param Activite $activite
      * @param ActiviteRepository $activiteRepository
      * @return Response
@@ -189,7 +222,7 @@ class ActiviteController extends AbstractController
 
     #[Route('/show/pdf/{id}', name : 'activite_show_pdf')]
 
-    public function showPdf(Activite $activite, ActiviteRepository $activiteRepository,Request $request, EntityManagerInterface $entityManager): Response
+    public function showPdf(Activite $activite, ActiviteRepository $activiteRepository): Response
     {
         //On récupère une activité en fonction de son identifiant
         $activites = $activiteRepository->findOneBy(['id' => $activite]);
@@ -201,12 +234,13 @@ class ActiviteController extends AbstractController
     }
 
     /**
-     * 
+     *
      * Cette méthode sert à modifier une activité
      *
      * @param Request $request
      * @param Activite $activite
      * @param EtatRepository $etatRepository
+     * @param EntityManagerInterface $entityManager
      * @return Response
      */
 
@@ -256,7 +290,7 @@ class ActiviteController extends AbstractController
 
     /**
      * Cette méthode sert à supprimer une activité et un fichier pdf s'il y en a un de lié.
-     * 
+     *
      * @param Activite $activite
      * @param DocPdfRepository $docPdfRepository
      * @param PhotoAlbumRepository $photoAlbumRepository
@@ -265,7 +299,7 @@ class ActiviteController extends AbstractController
 
     #[Route ('/delete/{id}', name : 'delete_activite')]
 
-    public function deleteActivite(Activite $activite, DocPdfRepository $docPdfRepository, PhotoAlbumRepository $photoAlbumRepository, EntityManagerInterface $entityManager): Response
+    public function deleteActivite(Activite $activite, DocPdfRepository $docPdfRepository, PhotoAlbumRepository $photoAlbumRepository): Response
     {
         $this->denyAccessUnlessGranted("ROLE_ADMIN");
         $pdf = $docPdfRepository->findOneBy(['pdfactivite' => $activite]);
@@ -308,8 +342,9 @@ class ActiviteController extends AbstractController
 
     /**
      * Cette méthode sert à s'inscrire à une activité.
-     * 
+     *
      * @param Activite $activite
+     * @param EntityManagerInterface $entityManager
      * @return Response
      */
 
@@ -335,8 +370,9 @@ class ActiviteController extends AbstractController
 
     /**
      * Cette méthode sert à se désister d'une activité.
-     * 
+     *
      * @param Activite $activite
+     * @param EntityManagerInterface $entityManager
      * @return Response
      */
 
@@ -362,9 +398,10 @@ class ActiviteController extends AbstractController
 
     /**
      * Cette activité sert a annulé une activité.
-     * 
+     *
      * @param Activite $activite
      * @param EtatRepository $etatRepository
+     * @param EntityManagerInterface $entityManager
      * @return Response
      */
 

@@ -1,7 +1,7 @@
 // JavaScript pour ajuster la largeur du carrousel
 const carousel = document.getElementById('carousel');
 const carouselTrack = document.getElementById('carousel-track');
-const slides = carousel.querySelectorAll('img');
+//const slides = carousel.querySelectorAll('img');
 
 carouselTrack.style.width = `${carousel.clientWidth * slides.length}px`;
 
