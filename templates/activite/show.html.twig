@@ -1,17 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Détails de l'activité |{{ parent() }}{% endblock %}
-
 {% block body %}
 	<div class="container container-profil">
-		{% if photoIntro is not empty %}
-			<figure class="textcenter">
-				<img src="{{ asset('photo-intro/' ~ photoIntro) }}" alt="Programme des activités">
-				<figcaption class="fig">Détails de l'activité</figcaption>
-			</figure>
-		{% else %}
-			<h1 class="titreEnTete">Détails de l'activité</h1>
-		{% endif %}
 
 		{% if is_granted("ROLE_ADMIN") %}
 			<div class="boutonModifierTexte">
