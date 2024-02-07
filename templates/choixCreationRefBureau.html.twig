@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Choix de Création | {{ parent() }}{% endblock %}
+{# la page de choix de création #}
+
+{% block body %}
+    {% if is_granted("ROLE_ADMIN") %}
+        <div class="container">
+            <h1>Choix de Création</h1>
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>Créer un Référent</h2>
+                    <p>Créer un nouveau référent technique</p>
+                    <a href="{{ path('createRef') }}" class="btn btn-primary">Créer un Référent</a>
+                </div>
+                <div class="col-md-6">
+                    <h2>Créer un rôle du Bureau</h2>
+                    <p>Créer un nouveau rôle du bureau</p>
+                    <a href="{{ path('createBureau') }}" class="btn btn-primary">Créer un Bureau</a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

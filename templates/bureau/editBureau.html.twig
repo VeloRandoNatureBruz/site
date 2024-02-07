@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification d'un Rôle du Bureau | {{ parent() }}{% endblock %}
+{# La page de Modification d'un Rôle du Bureau #}
+
+{% block body %}
+    {# Si l'utilisateur est Administrateur alors il peut avoir accès à cette page #}
+    {% if is_granted("ROLE_ADMIN") %}
+        <div class="container">
+            {# Le formulaire #}
+            <div class="referent_box">
+                {{ form_start(form) }}
+                <div class="form-referent-fond-noir">
+                    {# Le Titre #}
+                    <div class="title_form col-12">
+                        <h1>Modifier un Rôle du Bureau</h1>
+                    </div>
+                    <div class="centre_form_referent">
+                        <div class="col-lg-6 test-color-size3">
+                            {# Le nom du Rôle du Bureau #}
+                            <div class="col-lg-4 test-color-size4">
+                                <label>Nouveau Rôle du Bureau :</label>
+                                <p>{{ form_widget(form.nom) }}</p>
+                            </div>
+                            {# l'Odre pour gérer l'affichage sur le Trombinoscope et le Bureau #}
+                            <div class="col-lg-2 color-size-1">
+                                <label>Ordre :</label>
+                                <p>{{ form_widget(form.ordre) }}</p>
+                            </div>
+                        </div>
+                        {# Informations #}
+                        <div class="col-lg-6 test-color-size2">
+                            <p>L'ordre gère l'affichage des Rôles du Bureau.</p>
+                            <div>
+                                <strong>1 - </strong>Président
+                                <br>
+                                <strong>2 - </strong>Bureau
+                                <br>
+                                <strong>3 - </strong>Référents
+                                <br>
+                                <strong>4 - </strong>Adhérents
+                            </div>
+                        </div>
+                    </div>
+                    {# Les boutons Enregistrer et Retour #}
+                    <div class="col-lg-12 button-enregistrer-new-referent">
+                        <div class="d-flex justify-content-center">
+                            <button class="mb-5 mt-2 btn btn-primary btn btn-lg">{{ button_label|default('Enregistrer') }}</button>
+                            <a href="{{ path('bureau') }}" class="mb-5 mt-2 btn btn-primary btn btn-lg espace-button-referent">Retour</a>
+                        </div>
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
