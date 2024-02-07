@@ -68,6 +68,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(targetEntity: Referent::class, inversedBy: 'user')]
     private $referents;
 
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Bureau $bureau = null;
+
     public function __toString()
     {
         return $this->getUserIdentifier();
@@ -324,6 +327,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $photo->setAdhherent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getBureau(): ?Bureau
+    {
+        return $this->bureau;
+    }
+
+    public function setBureau(?Bureau $bureau): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($bureau === null && $this->bureau !== null) {
+            $this->bureau->setUser(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($bureau !== null && $bureau->getUser() !== $this) {
+            $bureau->setUser($this);
+        }
+
+        $this->bureau = $bureau;
 
         return $this;
     }
