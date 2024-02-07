@@ -62,6 +62,17 @@
 									{{ user.email }}</p>
 								<p>Date de Naissance:
 									{{ user.dateNaissance ? user.dateNaissance|date('d-m-Y') : '' }}</p>
+
+								{# Afficher les référents associés à l'utilisateur #}
+								<p>Référents:</p>
+								<ul>
+									{% for referent in user.referents %}
+										<li>{{ referent.nom }}</li>
+									{% endfor %}
+								</ul>
+
+								{# Afficher le bureau associé à l'utilisateur #}
+								<p>Bureau: {{ user.bureau ? user.bureau.nom : 'Non assigné' }}</p>
 							</div>
 
 							{# Le bouton Supprimer et Modifier#}

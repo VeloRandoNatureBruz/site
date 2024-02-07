@@ -3,6 +3,7 @@
 namespace App\Form;
 
 
+use App\Entity\Bureau;
 use App\Entity\Referent;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -19,6 +20,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\CallbackTransformer;
 
+use Symfony\Component\Validator\Constraints\Count;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -64,7 +66,21 @@ class UserType extends AbstractType
                 ],
             ])
             ->add('referents', EntityType::class, [
-                'class' => Referent::class
+                'class' => Referent::class,
+                'label' => 'Référents',
+                'multiple' => true,
+                'constraints' => [
+                    new Count([
+                        'max' => 3,
+                        'maxMessage' => 'Vous ne pouvez pas sélectionner plus de 3 référents.',
+                    ]),
+                ],
+            ])
+            ->add('bureau', EntityType::class, [
+                'class' => Bureau::class,
+                'label' => 'Bureau',
+                'multiple' => false,
+                'expanded' => false,
             ])
 
             #class birthday pour que les années soient dispos jusque 1901#

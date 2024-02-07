@@ -77,6 +77,19 @@
 						</tr>
 
 						<tr>
+							<th>Bureau :</th>
+							<td>{{ user.bureau }}</td>
+						</tr>
+						<tr>
+							<th>Référents :</th>
+							<td>
+								{% for referent in user.referents %}
+									{{ referent.nom }} {{ referent.prenom }}<br>
+								{% endfor %}
+							</td>
+						</tr>
+
+						<tr>
 							<th>Nom :</th>
 							<td>{{ user.nom }}</td>
 						</tr>

@@ -49,12 +49,21 @@
 							{% if is_granted("ROLE_ADMIN") %}
 								<p>Role :
 									{{ form_widget(form.roles) }}</p>
-								<p>Référent :
-									{{ form_widget(form.referents) }}</p>
+								<div class="adhérent_widget">
+									<p>Bureau :</p>
+									<p>{{ form_widget(form.bureau) }}</p>
+								</div>
+								<div class="adhérent_widget">
+									<p>Référents :</p>
+									{{ form_widget(form.referents) }}
+									{{ form_widget(form.referents) }}
+									{{ form_widget(form.referents) }}
+								</div>
 
 								{# Sinon on lui cache #}
 							{% else %}
 								<p hidden>{{ form_widget(form.roles) }}</p>
+								<p hidden>{{ form_widget(form.bureau) }}</p>
 								<p hidden>{{ form_widget(form.referents) }}</p>
 							{% endif %}
 							<p>Prénom :
