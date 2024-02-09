@@ -68,7 +68,7 @@ class UserType extends AbstractType
             ->add('referents', EntityType::class, [
                 'class' => Referent::class,
                 'label' => 'Référents',
-                'multiple' => true,
+                'placeholder' => 'Sélectionner une fonction référent',
                 'constraints' => [
                     new Count([
                         'max' => 3,
@@ -76,12 +76,12 @@ class UserType extends AbstractType
                     ]),
                 ],
             ])
+
             ->add('bureau', EntityType::class, [
                 'class' => Bureau::class,
                 'label' => 'Bureau',
-                'multiple' => false,
-                'expanded' => false,
-            ])
+                'placeholder' => 'Sélectionner un rôle du bureau'
+                 ])
 
             #class birthday pour que les années soient dispos jusque 1901#
             ->add('date_naissance', BirthdayType::class, [

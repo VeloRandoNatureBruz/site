@@ -23,11 +23,11 @@
 		<div class="wrap">
 			<div>
 				{% for user in users %}
-					{% if user.referents.getId() == 1 %}
+					{% if user.bureau.getId() == 1 %}
 						<div>
 							<!-- On affiche la qualité référent -->
 							<div class="carte-entete membresBureau">
-								<h2>{{ user.referents.getNom() }}
+								<h2>{{ user.bureau.getNom() }}
 								</h2>
 							</div>
 							<div

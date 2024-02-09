@@ -66,11 +66,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $photos;
 
 
-    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
-    private ?Bureau $bureau = null;
+
 
     #[ORM\ManyToMany(targetEntity: Referent::class, inversedBy: 'users')]
     private Collection $referents;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    private ?Bureau $bureau = null;
 
     public function __toString()
     {
@@ -82,7 +84,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->inscription = new ArrayCollection();
         $this->activite = new ArrayCollection();
         $this->photos = new ArrayCollection();
-        $this->referents = new ArrayCollection();
+
     }
 
     public function getId(): ?int

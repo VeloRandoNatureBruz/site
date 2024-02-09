@@ -10,13 +10,11 @@
 		</div>
 		<div class="adhérent_widget">
 			<p>Bureau :</p>
-			<p>{{ form_widget(form.bureau) }}</p>
+			<p>{{ form_widget(form.bureau, { 'attr': {'class': 'form-control'} }) }}</p>
 		</div>
 		<div class="adhérent_widget">
 			<p>Référents :</p>
-			{{ form_widget(form.referents) }}
-			{{ form_widget(form.referents) }}
-			{{ form_widget(form.referents) }}
+			<p>{{ form_widget(form.referents, { 'attr': {'class': 'form-control'} }) }}</p>
 		</div>
 		<div class="adhérent_widget">
 			<p>Prénom :</p>

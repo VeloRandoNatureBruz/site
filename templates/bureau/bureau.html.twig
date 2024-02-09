@@ -5,7 +5,7 @@
 
 {% block body %}
     {% if is_granted("ROLE_ADMIN") %}
-        <div class="global-bureau">
+        <div class="global-referent">
             <h1>Liste du Bureau</h1>
         </div>
         <div class="col-lg-12 center-hr">
@@ -13,16 +13,16 @@
         </div>
         <div class="container color_box">
             {% for bureau in bureaux %}
-                <div class="color_bureau">
-                    <div class="row liste-bureau">
-                        <div class="col-lg-12 nom-bureau">
-                            <p class="bureau-style">
+                <div class="color_referent">
+                    <div class="row liste-referent">
+                        <div class="col-lg-12 nom-referent">
+                            <p class="referent-style">
                                 {{ bureau.nom }}
                             </p>
                         </div>
-                        <div class="col-lg-6 button-supprimer-modifier-bureau">
+                        <div class="col-lg-6 button-supprimer-modifier-referent">
                             <a class="btn btn-success" href="{{ path('updateBureau', {'id':bureau.id}) }}">Modifier</a>
-                            <a class="espace-button-bureau btn btn-secondary" href="{{ path('deleteBureau', {'id':bureau.id}) }}" onclick="return confirm('Voulez-vous vraiment supprimer ce bureau ?')">Supprimer</a>
+                            <a class="espace-button-referent btn btn-secondary" href="{{ path('deleteBureau', {'id':bureau.id}) }}" onclick="return confirm('Voulez-vous vraiment supprimer ce bureau ?')">Supprimer</a>
                         </div>
                     </div>
                 </div>
