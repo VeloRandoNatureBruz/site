@@ -26,7 +26,7 @@ class Bureau
 
     public function __construct()
     {
-        $this->users = new ArrayCollection();
+
     }
 
 
@@ -64,25 +64,6 @@ class Bureau
         return $this;
     }
 
-    public function getUser(): ?user
-    {
-        return $this->user;
-    }
-
-    public function setUser(?user $user): static
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, User>
-     */
-    public function getUsers(): Collection
-    {
-        return $this->users;
-    }
 
     public function addUser(User $user): static
     {
@@ -104,5 +85,15 @@ class Bureau
         }
 
         return $this;
+    }
+
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function setUsers(Collection $users): void
+    {
+        $this->users = $users;
     }
 }

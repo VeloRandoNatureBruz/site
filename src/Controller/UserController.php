@@ -6,8 +6,10 @@ use App\Entity\Photo;
 use App\Entity\User;
 use App\Form\IntroPhoto\ProfilIntroPhotoType;
 use App\Form\UserType;
+use App\Repository\BureauRepository;
 use App\Repository\IntroPhotoRepository;
 use App\Repository\PhotoRepository;
+use App\Repository\ReferentRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Mailer\MailerInterface;
@@ -246,13 +248,19 @@ class UserController extends AbstractController
 
     #[Route('/{id}/edit', name: 'user_edit', methods: ['GET', 'POST'])]
 
-    public function edit(Request $request, User $user, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, User $user, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager, ReferentRepository $referentRepository, BureauRepository $bureauRepository): Response
     {
         //Il faut être minimum Administrateur pour avoir accès a cette methode
         $this->denyAccessUnlessGranted("ROLE_ADMIN");
 
         //On recupere le pseudo de l'adhérent en cours
         $user1 = $this->getUser()->getUsername();
+
+        // Charger les référents associés à l'utilisateur
+        $referents = $referentRepository->findAll();
+
+        // Charger le bureau associé à l'utilisateur
+        $bureau = $bureauRepository->findOneBy(['user' => $user]);
 
         //Utilisation du formulaire du user
         $form = $this->createForm(UserType::class, $user);
@@ -300,7 +308,8 @@ class UserController extends AbstractController
         return $this->render('user/edit.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
-            'user1' => $user1
+            'user1' => $user1,
+
         ]);
     }
 
@@ -338,7 +347,7 @@ class UserController extends AbstractController
         //On renvoie un message de succes à l'utilisateur pour prévenir de la réussite de la suppresion.
         $this->addFlash('success', 'Le profil est bien supprimé');
         //On redirige l'utilisateur sur la page user/index.html.twig.
-        return $this->redirectToRoute('home1');
+        return $this->redirectToRoute('user_index');
     }
 
     /**
