@@ -21,11 +21,12 @@ class Bureau
     #[ORM\Column]
     private ?int $ordre = null;
 
-    #[ORM\OneToMany(mappedBy: 'Bureau', targetEntity: User::class)]
+    #[ORM\OneToMany(mappedBy: 'bureau', targetEntity: User::class)]
     private Collection $users;
 
     public function __construct()
     {
+        $this->users = new ArrayCollection();
 
     }
 
@@ -96,4 +97,6 @@ class Bureau
     {
         $this->users = $users;
     }
+
+
 }

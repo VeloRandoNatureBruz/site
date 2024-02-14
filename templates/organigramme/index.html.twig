@@ -11,7 +11,9 @@
 
 			<div class="card col-3 m-1">
 				<div class="carte-entete membresBureau">
-					<p class="role_user">{{ user.referents }}</p>
+					<p class="role_user">{% for referent in user.referents %}
+							<li>{{ referent.nom }}</li>
+						{% endfor %}</p>
 				</div>
 				<div class="card-body  d-flex flex-column">
 					<div class="d-flex flex-row justify-content-center">

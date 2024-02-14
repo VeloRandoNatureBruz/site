@@ -64,41 +64,31 @@ class Referent
         $this->ordre = $ordre;
     }
 
-    /**
-     * @return Collection|User[]
-     */
-    public function getUser():Collection
-    {
-        return $this->user;
-    }
 
-    public function setUser($user): void
-    {
-        $this->user = $user;
-    }
-
-    /**
-     * @return Collection<int, User>
-     */
     public function getUsers(): Collection
     {
         return $this->users;
     }
-
-    public function addUser(User $user): static
+    public function addUser(User $user): self
     {
         if (!$this->users->contains($user)) {
-            $this->users->add($user);
-            $user->addReferent($this);
+            $this->users[] = $user;
+            // optionally set the owning side to null (unless already changed)
+            if ($user->getReferents() !== $this) {
+                $user->addReferent($this);
+            }
         }
 
         return $this;
     }
 
-    public function removeUser(User $user): static
+    public function removeUser(User $user): self
     {
         if ($this->users->removeElement($user)) {
-            $user->removeReferent($this);
+            // set the owning side to null (unless already changed)
+            if ($user->getReferents() === $this) {
+                $user->removeReferent($this);
+            }
         }
 
         return $this;

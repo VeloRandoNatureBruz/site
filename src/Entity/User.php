@@ -23,10 +23,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Assert\Length(max: 50, maxMessage: 'Maximum 50 caracteres')]
     #[ORM\Column(type: 'string', length: 50, unique: true)]
-    private $username;
+    private string $username;
 
     #[ORM\Column(type: 'json')]
-    private $roles = [];
+    private array $roles = [];
 
     /**
      * @var string The hashed password
@@ -38,41 +38,39 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Type('string')]
     #[Assert\NotBlank(message: 'Veuillez inscrire votre nom')]
     #[ORM\Column(type: 'string', length: 60)]
-    private $nom;
+    private ?string $nom;
 
     #[ORM\Column(type: 'string', length: 60)]
-    private $prenom;
+    private ?string $prenom;
 
     #[ORM\Column(type: 'string', length: 20, nullable: true)]
-    private $telephone;
+    private ?string $telephone;
 
     #[Assert\Email()]
     #[ORM\Column(type: 'string', length: 255, unique : true)]
-    private $email;
+    private ?string $email;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private $date_naissance;
+    private ?\DateTimeInterface $date_naissance;
 
     #[ORM\Column(type: 'string', length: 100, nullable: true)]
-    private $resetToken;
+    private ?string $resetToken;
 
     #[ORM\ManyToMany(targetEntity: Activite::class, inversedBy: 'users')]
-    private $inscription;
+    private  $inscription;
 
-    #[ORM\OneToMany(targetEntity: Activite::class, mappedBy: 'organisateur', cascade: ['remove'])]
-    private $activite;
+    #[ORM\OneToMany(mappedBy: 'organisateur', targetEntity: Activite::class, cascade: ['remove'])]
+    private  $activite;
 
-    #[ORM\OneToMany(targetEntity: Photo::class, mappedBy: 'adhherent', cascade: ['persist', 'remove'])]
-    private $photos;
-
-
-
+    #[ORM\OneToMany(mappedBy: 'adhherent', targetEntity: Photo::class, cascade: ['persist', 'remove'])]
+    private  $photos;
 
     #[ORM\ManyToMany(targetEntity: Referent::class, inversedBy: 'users')]
-    private Collection $referents;
+    private  $referents;
 
-    #[ORM\ManyToOne(inversedBy: 'users')]
-    private ?Bureau $bureau = null;
+    #[ORM\ManyToOne(targetEntity: Bureau::class, inversedBy: 'users')]
+    private ?Bureau $bureau;
+
 
     public function __toString()
     {
@@ -84,6 +82,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->inscription = new ArrayCollection();
         $this->activite = new ArrayCollection();
         $this->photos = new ArrayCollection();
+        $this->referents = new ArrayCollection();
 
     }
 
@@ -341,18 +340,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->bureau;
     }
 
-    public function setBureau(?Bureau $bureau): static
+    public function setBureau(?Bureau $bureau): self
     {
-        // unset the owning side of the relation if necessary
-        if ($bureau === null && $this->bureau !== null) {
-            $this->bureau->setUser(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($bureau !== null && $bureau->getUser() !== $this) {
-            $bureau->setUser($this);
-        }
-
         $this->bureau = $bureau;
 
         return $this;

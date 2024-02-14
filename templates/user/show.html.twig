@@ -83,9 +83,11 @@
 						<tr>
 							<th>Référents :</th>
 							<td>
-								{% for referent in user.referents %}
-									{{ referent.nom }} {{ referent.prenom }}<br>
-								{% endfor %}
+								<ul>
+									{% for referent in user.referents %}
+										<li>{{ referent.nom }}</li>
+									{% endfor %}
+								</ul>
 							</td>
 						</tr>
 

@@ -9,112 +9,110 @@
 
 	{% if is_granted("ROLE_USER") %}
 		<div class="global-profiledit row col-lg-12 col-sm-10">
-			<div class="row col-lg-6 col-sm-10 profil-form-fond-noir border border-dark">
-				<div class="col-lg-12 title-modifier-profil">
-					<h1>Mon profil</h1>
-				</div>
+		<div class="row col-lg-6 col-sm-10 profil-form-fond-noir border border-dark">
+		<div class="col-lg-12 title-modifier-profil">
+			<h1>Mon profil</h1>
+		</div>
 
-				{# pour voir si l'utilisateur est bien le meme que le profil qu'il regarde #}
-				{% if user.username == user %}
-					<div
-						class="row position-photo-profiledit col-lg-8 col-sm-8">
+		{# pour voir si l'utilisateur est bien le meme que le profil qu'il regarde #}
+		{% if user.username == user %}
+			<div
+					class="row position-photo-profiledit col-lg-8 col-sm-8">
 
-						{# on boucle sur les photos pour l'afficher #}
-						{% for photo in user.photos %}
-							<div class="divPhotoSecond divPhoto">
-								<div class="centre_form_contact">
-									<div class="affichage-photo-profiledit">
-										<img src="{{ asset ('photo-profil/'~ photo.name) }}" class="col-lg-8" alt="photo de profil">
-									</div>
-								</div>
-								<div class="divPhoto">
-									<div
-										class="centre_form_contact">
-										{# On ajoute un lien permettant de supprimer une image (sera géré en Ajax) #}
-										<a href="{{ url('user_delete_photo', {id: photo.id}) }}" data-delete data-token="{{ csrf_token('DELETE' ~ photo.id ) }}" class="btn btn-light centre_form_contact ">Supprimer
-										</a>
-									</div>
-								</div>
+				{# on boucle sur les photos pour l'afficher #}
+				{% for photo in user.photos %}
+					<div class="divPhotoSecond divPhoto">
+						<div class="centre_form_contact">
+							<div class="affichage-photo-profiledit">
+								<img src="{{ asset ('photo-profil/'~ photo.name) }}" class="col-lg-8" alt="photo de profil">
 							</div>
-						{% endfor %}
+						</div>
+						<div class="divPhoto">
+							<div
+									class="centre_form_contact">
+								{# On ajoute un lien permettant de supprimer une image (sera géré en Ajax) #}
+								<a href="{{ url('user_delete_photo', {id: photo.id}) }}" data-delete data-token="{{ csrf_token('DELETE' ~ photo.id ) }}" class="btn btn-light centre_form_contact ">Supprimer
+								</a>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+
+			{# on appelle le formulaire user #}
+			<div class="row div-ext-modifier-profil col-lg-12">
+				<div class="col-lg-6 div-int-modifier-profil">
+					{{ form_start(form) }}
+					<p>Pseudo :
+						{{ form_widget(form.username) }}</p>
+					{# Si l'Utilisateur est Administrateur alors il peut voir le roles et le referents #}
+					{% if is_granted("ROLE_ADMIN") %}
+						<p>Role :
+							{{ form_widget(form.roles) }}</p>
+						<p>Bureau :
+							{{ form_widget(form.bureau) }}</p>
+						<p>Référent :
+							{{ form_widget(form.referents) }}</p>
+
+
+						{# Sinon on lui cache #}
+					{% else %}
+						<p hidden>{{ form_widget(form.roles) }}</p>
+						<p hidden>{{ form_widget(form.bureau) }}</p>
+						<p hidden>{{ form_widget(form.referents) }}</p>
+					{% endif %}
+					<p>Prénom :
+						{{ form_widget(form.prenom) }}</p>
+					<p>Nom :
+						{{ form_widget(form.nom) }}</p>
+					<p>Mail :
+						{{ form_widget(form.email) }}</p>
+					<p>Téléphone :
+						{{ form_widget(form.telephone) }}</p>
+					<p>Mot de Passe :
+						{{ form_widget(form.password) }}</p>
+					<p>Date de Naissance :
+						{{ form_widget(form.date_naissance) }}</p>
+					<p>Photo de profil :{{ form_widget(form.photos) }}</p>
+					<div class="row col-lg-6 col-sm-10 col-lg-12 profil-form-fond-noir border border-dark">
+						<div class="text-center">
+							<label class="form-check-label" for="agree-checkbox">
+								J'ai pris connaissance des droits à l'image, de la charte ainsi que des statuts de l'association:
+								<input type="checkbox" required id="agree-checkbox" style="vertical-align: middle;">
+							</label>
+						</div>
+
+						<div class="row">
+							<div class="row d-flex justify-content-center m-1">
+								<a class="m-3 btn btn-primary btn-lg text-white" href="{{ asset('documents/Statuts_asso_Rando nature Bruz.pdf') }}" target="_blank">Statuts de l'association</a>
+								<a class="m-3 btn btn-primary btn-lg text-white" href="{{ asset('documents/Charte_asso_Rando nature Bruz.pdf') }}" target="_blank">Charte de l'association</a>
+							</div>
+						</div>
 					</div>
 
-					{# on appelle le formulaire user #}
-					<div class="row div-ext-modifier-profil col-lg-12">
-						<div class="col-lg-6 div-int-modifier-profil">
-							{{ form_start(form) }}
-							<p>Pseudo :
-								{{ form_widget(form.username) }}</p>
-							{# Si l'Utilisateur est Administrateur alors il peut voir le roles et le referents #}
-							{% if is_granted("ROLE_ADMIN") %}
-								<p>Role :
-									{{ form_widget(form.roles) }}</p>
-								<div class="adhérent_widget">
-									<p>Bureau :</p>
-									<p>{{ form_widget(form.bureau) }}</p>
-								</div>
-								<div class="adhérent_widget">
-									<p>Référents :</p>
-									{{ form_widget(form.referents) }}
-									{{ form_widget(form.referents) }}
-									{{ form_widget(form.referents) }}
-								</div>
+					{# Les Boutons Enregistrer et Retour #}
+					<div class="margin_button col-24row d-flex justify-content-center">
 
-								{# Sinon on lui cache #}
-							{% else %}
-								<p hidden>{{ form_widget(form.roles) }}</p>
-								<p hidden>{{ form_widget(form.bureau) }}</p>
-								<p hidden>{{ form_widget(form.referents) }}</p>
-							{% endif %}
-							<p>Prénom :
-								{{ form_widget(form.prenom) }}</p>
-							<p>Nom :
-								{{ form_widget(form.nom) }}</p>
-							<p>Mail :
-								{{ form_widget(form.email) }}</p>
-							<p>Téléphone :
-								{{ form_widget(form.telephone) }}</p>
-							<p>Mot de Passe :
-								{{ form_widget(form.password) }}</p>
-							<p>Date de Naissance :
-								{{ form_widget(form.date_naissance) }}</p>
-							<p>Photo de profil :{{ form_widget(form.photos) }}</p>
-							<div class="row col-lg-6 col-sm-10 col-lg-12 profil-form-fond-noir border border-dark">
-								<center>J'ai pris connaissance des droits à l'image, de la charte ainsi que des statuts de l'association:
-									<input type="checkbox" required>
-								</center>
-								<div class="row">
-									<div class="row d-flex justify-content-center m-1">
-										<a class="m-3 btn btn-primary btn-lg text-white" href="{{ asset('documents/Statuts_asso_Rando nature Bruz.pdf') }}" target="_blank">Statuts de l'association</a>
-										<a class="m-3 btn btn-primary btn-lg text-white" href="{{ asset('documents/Charte_asso_Rando nature Bruz.pdf') }}" target="_blank">Charte de l'association</a>
-									</div>
-								</div>
-							</div>
-
-							{# Les Boutons Enregistrer et Retour #}
-							<div class="margin_button col-24row d-flex justify-content-center">
-
-								<div class="bas_form_contact col-12">
-									<div class="bas_form_contact1">
-										{{ form_widget(form.envoyer) }}
-										{{ form_end(form) }}
-									</div>
-									<div class="bas_form_contact2">
-										<a href="{{ path('user_show', { 'id': app.user.id}) }}" class="btn btn-outline-secondary btn btn-lg">Retour</a>
-									</div>
-								</div>
-							</div> 
+						<div class="mt-3 mb-5 text-center">
+							<a class="btn btn-success btn btn-lg">
+								{{ form_widget(form.envoyer) }}
+								{{ form_end(form) }}
+							</a>
+								<a href="{{ path('user_show', { 'id': app.user.id}) }}" class="btn btn-outline-secondary btn btn-lg">Retour</a>
 
 						</div>
 					</div>
-				{% else %}
-					<div class="row d-flex justify-content-center m-3">
-						<a href="{{ path('home1') }}" class=" btn btn-lg btn-danger ">
-							vous n'avez pas les droits pour modifier le mot de passe</a>
-					</div>
-				{% endif %}
-		{% else %}
+
+				</div>
 			</div>
+		{% else %}
+			<div class="row d-flex justify-content-center m-3">
+				<a href="{{ path('home1') }}" class=" btn btn-lg btn-danger ">
+					vous n'avez pas les droits pour modifier le mot de passe</a>
+			</div>
+		{% endif %}
+	{% else %}
+		</div>
 		</div>
 	{% endif %}
 {% endblock %}
@@ -122,4 +120,20 @@
 {# on appelle la fonction javascript dans le dossier js de public #}
 {% block javascripts %}
 	<script src="{{ asset('js/images.js') }}"></script>
+	{# Script JavaScript pour limiter le choix des référents à 3 #}
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+			var maxCheckboxes = 3;
+
+			checkboxes.forEach(function (checkbox) {
+				checkbox.addEventListener('change', function () {
+					var checkedCount = document.querySelectorAll('input[type="checkbox"]:checked').length;
+					if (checkedCount > maxCheckboxes) {
+						this.checked = false;
+					}
+				});
+			});
+		});
+	</script>
 {% endblock %}

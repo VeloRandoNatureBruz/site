@@ -495,6 +495,54 @@ class HomeController extends AbstractController
         return $this->render('Association/Organisation.html.twig', [
             'photoIntro' => $photoIntroOrganisation->getOrganisationPhotoIntro(),
             'formPhotoIntro' => $formOrg->createView(),
+            'users' => $userRepository->orderUserByBureau(),
+        ]);
+    }
+
+    /**
+     * Cette méthode est en charge de rediriger vers la page Organisation bureau.
+     *
+     * @param UserRepository $userRepository
+     * @return Response
+     */
+
+    #[Route('/referents', name: 'referents')]
+
+    public function referents(UserRepository $userRepository, IntroPhotoRepository $introPhotoRepository, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $photoIntroOrganisation = $introPhotoRepository->find("1");
+
+        $formOrg = $this->createForm(OrganisationIntroPhotoType::class, $photoIntroOrganisation);
+
+        $formOrg->handleRequest($request);
+
+
+        if ($formOrg->isSubmitted() && $formOrg->isValid()) {
+
+            $introPhoto = $formOrg->get('OrganisationPhotoIntro')->getData();
+            if ($introPhoto != null) {
+
+                $fichier = md5(uniqid()) . '.' . $introPhoto->guessExtension();
+
+                //Copie le fichier dans le dossier photo-profil dans le 'public'
+                $introPhoto->move(
+                    $this->getParameter('photo_intro'),
+                    $fichier
+                );
+                $photoIntroOrganisation->setOrganisationPhotoIntro($fichier);
+            } else {
+                $photoIntroOrganisation->setOrganisationPhotoIntro($introPhoto);
+            }
+            $entityManager->persist($photoIntroOrganisation);
+            $entityManager->flush();
+        }
+
+
+        //Permet de rediriger vers la page organisation.html.twig (organisation bureau)
+        // et permet de gérer l'affichage des adhérent par leur référencement.
+        return $this->render('Association/Referents.html.twig', [
+            'photoIntro' => $photoIntroOrganisation->getOrganisationPhotoIntro(),
+            'formPhotoIntro' => $formOrg->createView(),
             'users' => $userRepository->orderUserByReferent(),
         ]);
     }

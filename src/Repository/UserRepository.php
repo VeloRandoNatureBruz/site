@@ -74,15 +74,13 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
 
     #On récupère la table User et la table Referent #
     #Ensuite on tris les users via le champ ordre de la table Referent#
-    public function orderUserByReferent(){
-        $query = $this
-            ->createQueryBuilder('u')
-            ->innerJoin('u.referents', 'r')
-            ->addSelect('r')
+    public function orderUserByReferent(): array
+    {
+        return $this->createQueryBuilder('u')
+            ->innerJoin('u.referents', 'r') // Utilisation de innerJoin pour récupérer uniquement les utilisateurs ayant des référents associés
             ->orderBy('r.ordre', 'ASC')
-            ->orderBy('r.id','ASC')
-        ;
-        return $query->getQuery()->getResult();
+            ->getQuery()
+            ->getResult();
     }
 
     #On récupère la table User, Photo et la table Referent #
@@ -98,6 +96,20 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
 
         ;
         return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Trouve les utilisateurs ayant un bureau associé et les ordonne par l'ordre de leur bureau.
+     *
+     * @return User[] Retourne un tableau d'utilisateurs ayant un bureau associé, ordonné par l'ordre de leur bureau.
+     */
+    public function orderUserByBureau(): array
+    {
+        return $this->createQueryBuilder('u')
+            ->join('u.bureau', 'b')
+            ->orderBy('b.ordre', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 
 

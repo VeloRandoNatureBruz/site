@@ -59,5 +59,21 @@
 		<div class="bas_form_adhérent2">
 			<a href="{{ path('user_index') }}" class="btn btn-secondary">Retour</a>
 		</div>
+		<!-- Script JavaScript pour limiter le choix des référents à 3 -->
+		<script>
+			document.addEventListener('DOMContentLoaded', function () {
+				var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+				var maxCheckboxes = 3;
+
+				checkboxes.forEach(function (checkbox) {
+					checkbox.addEventListener('change', function () {
+						var checkedCount = document.querySelectorAll('input[type="checkbox"]:checked').length;
+						if (checkedCount > maxCheckboxes) {
+							this.checked = false;
+						}
+					});
+				});
+			});
+		</script>
 	</div>
 </div>
