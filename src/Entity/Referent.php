@@ -22,8 +22,10 @@ class Referent
     #[ORM\Column (type: 'integer')]
     private $ordre;
 
-    #[ORM\OneToMany (targetEntity: User::class, mappedBy: 'referents', cascade: ['persist','remove'])]
-    private $user;
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'referents')]
+    private Collection $users;
+
+
 
     public function __toString()
     {
@@ -32,7 +34,7 @@ class Referent
 
     public function __construct()
     {
-        $this->user =  new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -62,17 +64,34 @@ class Referent
         $this->ordre = $ordre;
     }
 
-    /**
-     * @return Collection|User[]
-     */
-    public function getUser():Collection
+
+    public function getUsers(): Collection
     {
-        return $this->user;
+        return $this->users;
+    }
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            // optionally set the owning side to null (unless already changed)
+            if ($user->getReferents() !== $this) {
+                $user->addReferent($this);
+            }
+        }
+
+        return $this;
     }
 
-    public function setUser($user): void
+    public function removeUser(User $user): self
     {
-        $this->user = $user;
+        if ($this->users->removeElement($user)) {
+            // set the owning side to null (unless already changed)
+            if ($user->getReferents() === $this) {
+                $user->removeReferent($this);
+            }
+        }
+
+        return $this;
     }
 }
 

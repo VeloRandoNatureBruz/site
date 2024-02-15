@@ -6,8 +6,10 @@ use App\Entity\Photo;
 use App\Entity\User;
 use App\Form\IntroPhoto\ProfilIntroPhotoType;
 use App\Form\UserType;
+use App\Repository\BureauRepository;
 use App\Repository\IntroPhotoRepository;
 use App\Repository\PhotoRepository;
+use App\Repository\ReferentRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Mailer\MailerInterface;
@@ -19,6 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 
 #[Route("/user")]
@@ -233,6 +236,8 @@ class UserController extends AbstractController
                 ]);
             }
         }
+        // Ajouter un return par défaut si aucun des cas dans la boucle foreach n'est satisfait
+        return new Response('Erreur 404: Page non trouvée', 404);
     }
 
     /**
@@ -246,64 +251,43 @@ class UserController extends AbstractController
 
     #[Route('/{id}/edit', name: 'user_edit', methods: ['GET', 'POST'])]
 
-    public function edit(Request $request, User $user, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager, int $id): Response
     {
-        //Il faut être minimum Administrateur pour avoir accès a cette methode
+        // Récupérer l'utilisateur à modifier en fonction de l'ID passé dans l'URL
+        $user = $entityManager->getRepository(User::class)->find($id);
+
+        // Vérifier si l'utilisateur en cours est autorisé à accéder à cette fonctionnalité
         $this->denyAccessUnlessGranted("ROLE_ADMIN");
 
-        //On recupere le pseudo de l'adhérent en cours
-        $user1 = $this->getUser()->getUsername();
-
-        //Utilisation du formulaire du user
+        // Créer le formulaire en utilisant l'utilisateur à modifier
         $form = $this->createForm(UserType::class, $user);
 
-        //Gere le traitement du formulaire
+
+        // Gérer la soumission du formulaire
         $form->handleRequest($request);
 
-        //Si le formulaire a été envoyer et est valide ...
         if ($form->isSubmitted() && $form->isValid()) {
-
-            //Hashe le mot de passe
-            $hashed = $passwordHasher->hashPassword($user, $user->getPassword());
-            $user->setPassword($hashed);
-
-            //On recupere les photos envoyées
-            $photos = $form->get('photos')->getData();
-            dump($photos);
-
-            //On boucle sur les photos
-            foreach ($photos as $photo) {
-
-                //On genere un nouveau no de fichier
-                $fichier = md5(uniqid()) . '.' . $photo->guessExtension();
-                dump($fichier);
-
-                //Copie le fichier dans le dossier photo-profil
-                $photo->move(
-                    $this->getParameter('photo_directory'),
-                    $fichier
-                );
-
-                //On stocke le nom de la photo dans la bdd
-                $phot = new Photo();
-                $phot->setName($fichier);
-                $user->addPhoto($phot);
+            // Hasher le mot de passe s'il a été modifié
+            if ($form->get('password')->getData()) {
+                $user->setPassword($passwordHasher->hashPassword($user, $form->get('password')->getData()));
             }
 
+            // Enregistrer les modifications dans la base de données
             $entityManager->flush();
-            //On renvoie un message de succes à l'utilisateur pour prévenir de la réussite de la modification.
-            $this->addFlash('success', 'Le profil a bien été modifié !!');
-            //On redirige l'utilisateur sur la page user/index.html.twig.
+
+            // Ajouter un message de succès
+            $this->addFlash('success', 'Profil modifié avec succès.');
+
+            // Rediriger l'utilisateur vers la page de détail du profil (ou une autre page appropriée)
             return $this->redirectToRoute('user_index');
         }
-        //On renvoie les données et l'affichage du formulaire sur la page edit.html.twig.
+
+        // Afficher le formulaire de modification de profil
         return $this->render('user/edit.html.twig', [
-            'user' => $user,
             'form' => $form->createView(),
-            'user1' => $user1
+            'user' => $user,
         ]);
     }
-
     /**
      * Cette méthode est en charge de supprimer un Utilisateur
      * 
@@ -338,7 +322,7 @@ class UserController extends AbstractController
         //On renvoie un message de succes à l'utilisateur pour prévenir de la réussite de la suppresion.
         $this->addFlash('success', 'Le profil est bien supprimé');
         //On redirige l'utilisateur sur la page user/index.html.twig.
-        return $this->redirectToRoute('home1');
+        return $this->redirectToRoute('user_index');
     }
 
     /**
@@ -376,8 +360,6 @@ class UserController extends AbstractController
         } else {
             return new JsonResponse(['error' => 'Token Invalide'], 400);
         }
-        //On redirige l'utilisateur sur la page user/index.html.twig.
-        return $this->redirectToRoute('user_index');
     }
 
     /**

@@ -1,20 +1,18 @@
 <?php
 
-
 namespace App\Form;
 
-
-use App\Entity\Referent;
-use App\Entity\User;
+use App\Entity\Bureau;
+use App\Entity\user;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ReferentType extends AbstractType
+class BureauType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): Void
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('nom')
@@ -22,10 +20,10 @@ class ReferentType extends AbstractType
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver): Void
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'date_class' => Referent::class,
+            'data_class' => Bureau::class,
         ]);
     }
 }

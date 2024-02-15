@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste d Bureau | {{ parent() }}{% endblock %}
+{# la page de la liste des bureaux #}
+
+{% block body %}
+    {% if is_granted("ROLE_ADMIN") %}
+        <div class="global-referent">
+            <h1>Liste du Bureau</h1>
+        </div>
+        <div class="col-lg-12 center-hr">
+            <hr>
+        </div>
+        <div class="container color_box">
+            {% for bureau in bureaux %}
+                <div class="color_referent">
+                    <div class="row liste-referent">
+                        <div class="col-lg-12 nom-referent">
+                            <p class="referent-style">
+                                {{ bureau.nom }}
+                            </p>
+                        </div>
+                        <div class="col-lg-6 button-supprimer-modifier-referent">
+                            <a class="btn btn-success" href="{{ path('updateBureau', {'id':bureau.id}) }}">Modifier</a>
+                            <a class="espace-button-referent btn btn-secondary" href="{{ path('deleteBureau', {'id':bureau.id}) }}" onclick="return confirm('Voulez-vous vraiment supprimer ce bureau ?')">Supprimer</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

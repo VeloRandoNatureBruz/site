@@ -30,6 +30,14 @@ class ReferentRepository extends ServiceEntityRepository
 
         return $query->getResult();
     }
+
+    public function findReferentByOrder()
+    {
+        return $this->createQueryBuilder('r')
+            ->orderBy('r.ordre', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
     // /**
     //  * @return Referent[] Returns an array of Referent objects
     //  */

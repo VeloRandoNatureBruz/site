@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Activite;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -23,10 +24,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Assert\Length(max: 50, maxMessage: 'Maximum 50 caracteres')]
     #[ORM\Column(type: 'string', length: 50, unique: true)]
-    private $username;
+    private string $username;
 
     #[ORM\Column(type: 'json')]
-    private $roles = [];
+    private array $roles = [];
 
     /**
      * @var string The hashed password
@@ -38,35 +39,40 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Type('string')]
     #[Assert\NotBlank(message: 'Veuillez inscrire votre nom')]
     #[ORM\Column(type: 'string', length: 60)]
-    private $nom;
+    private ?string $nom;
 
     #[ORM\Column(type: 'string', length: 60)]
-    private $prenom;
+    private ?string $prenom;
 
     #[ORM\Column(type: 'string', length: 20, nullable: true)]
-    private $telephone;
+    private ?string $telephone;
 
     #[Assert\Email()]
     #[ORM\Column(type: 'string', length: 255, unique : true)]
-    private $email;
+    private ?string $email;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private $date_naissance;
+    private ?\DateTimeInterface $date_naissance;
 
     #[ORM\Column(type: 'string', length: 100, nullable: true)]
-    private $resetToken;
+    private ?string $resetToken;
 
     #[ORM\ManyToMany(targetEntity: Activite::class, inversedBy: 'users')]
-    private $inscription;
+    private  $inscription;
 
-    #[ORM\OneToMany(targetEntity: Activite::class, mappedBy: 'organisateur', cascade: ['remove'])]
-    private $activite;
+    #[ORM\OneToMany(mappedBy: 'organisateur', targetEntity: Activite::class, cascade: ['remove'])]
+    private  $activite;
 
-    #[ORM\OneToMany(targetEntity: Photo::class, mappedBy: 'adhherent', cascade: ['persist', 'remove'])]
-    private $photos;
+    #[ORM\OneToMany(mappedBy: 'adhherent', targetEntity: Photo::class, cascade: ['persist', 'remove'])]
+    private  $photos;
 
-    #[ORM\ManyToOne(targetEntity: Referent::class, inversedBy: 'user')]
-    private $referents;
+    #[ORM\ManyToMany(targetEntity: Referent::class, inversedBy: 'users')]
+    private  $referents;
+
+    #[ORM\ManyToOne(targetEntity: Bureau::class, inversedBy: 'users')]
+    #[Assert\NotBlank(message: 'Veuillez choisir Adhérent')]
+    private ?Bureau $bureau;
+
 
     public function __toString()
     {
@@ -78,6 +84,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->inscription = new ArrayCollection();
         $this->activite = new ArrayCollection();
         $this->photos = new ArrayCollection();
+        $this->referents = new ArrayCollection();
+
+
     }
 
     public function getId(): ?int
@@ -231,17 +240,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getReferents(): ?Referent
+    public function getReferents(): Collection
     {
         return $this->referents;
     }
 
-    public function setReferents(?Referent $referents): self
+    public function setReferents(Collection $referents): self
     {
         $this->referents = $referents;
 
         return $this;
     }
+
 
 
     /**
@@ -324,6 +334,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $photo->setAdhherent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getBureau(): ?Bureau
+    {
+        return $this->bureau;
+    }
+
+    public function setBureau(?Bureau $bureau): self
+    {
+        $this->bureau = $bureau;
+
+        return $this;
+    }
+
+    public function addReferent(Referent $referent): static
+    {
+        if (!$this->referents->contains($referent)) {
+            $this->referents->add($referent);
+        }
+
+        return $this;
+    }
+
+    public function removeReferent(Referent $referent): static
+    {
+        $this->referents->removeElement($referent);
 
         return $this;
     }

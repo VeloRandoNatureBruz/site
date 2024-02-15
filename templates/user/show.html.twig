@@ -32,7 +32,7 @@
 			{% endif %}
 		</div>
 
-	</div>
+
 	<div class="center-hr">
 		<hr class="hr25-pourcent center">
 	</div>
@@ -73,6 +73,21 @@
 									Administrateur
 									{% else %}
 								{% endif %}
+							</td>
+						</tr>
+
+						<tr>
+							<th>Bureau :</th>
+							<td>{{ user.bureau }}</td>
+						</tr>
+						<tr>
+							<th>Référents :</th>
+							<td>
+								<ul>
+									{% for referent in user.referents %}
+										<li>{{ referent.nom }}</li>
+									{% endfor %}
+								</ul>
 							</td>
 						</tr>
 

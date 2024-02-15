@@ -3,11 +3,13 @@
 namespace App\Form;
 
 
+use App\Entity\Bureau;
 use App\Entity\Referent;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -19,6 +21,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\CallbackTransformer;
 
+use Symfony\Component\Validator\Constraints\Count;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -64,7 +67,27 @@ class UserType extends AbstractType
                 ],
             ])
             ->add('referents', EntityType::class, [
-                'class' => Referent::class
+                'class' => Referent::class,
+                'label' => 'Référents',
+                'multiple' => true, // Permet la sélection de plusieurs référents
+                'expanded' => true, // Affiche les référents sous forme de cases à cocher
+                'attr' => ['data-max-options' => 3], // Limite le nombre maximum d'options sélectionnables à 3
+                'placeholder' => 'Sélectionner une fonction référent',
+                'choices' => $options['referents'], // Utilisez les referents passés en option
+                'constraints' => [
+                    new Count([
+                        'max' => 3,
+                        'maxMessage' => 'Vous ne pouvez pas sélectionner plus de 3 référents.',
+                    ]),
+                ],
+            ])
+
+            ->add('bureau', EntityType::class, [
+                'required' => false,
+                'class' => Bureau::class,
+                'label' => 'Bureau',
+                'placeholder' => 'Sélectionner un rôle du bureau',
+                'choices' => $options['bureau'], // Utilisez le bureau passés en option
             ])
 
             #class birthday pour que les années soient dispos jusque 1901#
@@ -101,6 +124,8 @@ class UserType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'referents' => null,
+            'bureau' => null,
         ]);
     }
 }

@@ -1,46 +1,61 @@
 {% extends 'base.html.twig' %}
-{% block title %}Création d'un Référent |
+{% block title %}Modification d'un Référent |
 	{{ parent() }}
 {% endblock %}
-{# la page de la liste des référents #}
+{# La page de Création d'un Référent #}
 
 {% block body %}
-	{% if is_granted("ROLE_ADMIN") %}
 
-		{{ form_start(form) }}
-		<div class="container-fluid">
-			<div class="main__partenaire">
-				<div class="form__partenaire">
+	{# Si l'utilisateur est Administrateur alors il peut avoir accès à cette page #}
+	{% if is_granted("ROLE_ADMIN") %}
+		<div
+				class="container">
+
+			{# Le formulaire #}
+			<div class="referent_box">
+				{{ form_start(form) }}
+				<div
+						class="form-referent-fond-noir">
+
+					{# Le Titre #}
 					<div class="title_form col-12">
-						<h1>Création d'un Référent</h1>
+						<h1>Créer un Référent</h1>
 					</div>
 					<div class="centre_form_referent">
-						<div class="col-lg-6 test-color-size3">
+						<div
+								class="col-lg-6 test-color-size3">
+
+							{# Le nom du Référent #}
 							<div class="col-lg-4 test-color-size4">
 								<label>Nouveau Référent :
 								</label>
 								<p>{{ form_widget(form.nom) }}</p>
 							</div>
+
+							{# l'Odre pour gérer l'affichage sur le Trombinoscope et le Bureau #}
 							<div class="col-lg-2 color-size-1">
 								<label>Ordre :
 								</label>
 								<p>{{ form_widget(form.ordre) }}</p>
 							</div>
 						</div>
-					</div>
-					<div class="col-lg-6 col-xs-12 test-color-size2">
-						<p>L'ordre gère l'affichage des Référents.</p>
-						<div>
-							<strong>1 - </strong>Président
-							<br>
-							<strong>2 - </strong>Bureau
-							<br>
-							<strong>3 - </strong>Référents
-							<br>
-							<strong>4 - </strong>Adhérents
+
+						{# Informations #}
+						<div class="col-lg-6 test-color-size2">
+							<p>L'ordre gère l'affichage des Référents.</p>
+							<div>
+								<ul>
+									{% for referent in referents %}
+										<li><strong>{{ referent.ordre }} - </strong>{{ referent.nom }}</li>
+									{% endfor %}
+								</ul>
+							</div>
 						</div>
 					</div>
+					<p>Afin de conserver un affichage cohérent,<br> veuillez ajouter un chiffre au-dessus
+						de l'ordre le plus élevé actuel pour ajouter un nouveau référent.</p>
 
+					{# Les boutons Enregistrer et Retour #}
 					<div class="col-lg-12 button-enregistrer-new-referent">
 						<div class="d-flex justify-content-center">
 							<button class="mb-5 mt-2 btn btn-primary btn btn-lg">{{ button_label|default('Enregistrer') }}</button>
