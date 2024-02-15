@@ -18,7 +18,8 @@ final class Version20240207113256 extends AbstractMigration
     }
 
     public function up(Schema $schema): void
-    {
+    {  // Cette migration implémente la table bureau. Elle a été manuellement modifiée pour conserver les données de la BDD
+        //et apporté les changements liés aux modifs des entitées .
         // this up() migration is auto-generated, please modify it to your needs
         //cette première ligne suprime un doublon en BDD
         $this->addSql('DELETE FROM user WHERE id = 105');
