@@ -40,14 +40,16 @@ class ReferentController extends AbstractController
 
     /**
      * Cette méthode sert à créer un référent
-     * 
+     *
+     * @param EntityManagerInterface $entityManager
      * @param Request $request
+     * @param $referentRepository
      * @return Response
      */
 
     #[Route ('/createRef', name : 'createRef')]
 
-    public function createReferent(EntityManagerInterface $entityManager, Request $request): Response
+    public function createReferent(EntityManagerInterface $entityManager, Request $request, ReferentRepository $referentRepository): Response
     {
         //On refuse l'accès a cette méthode a l'utilisateur si l'utilisateur n'a pas le rôle Admin.
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
@@ -71,6 +73,7 @@ class ReferentController extends AbstractController
         //On envoie les données sur la page newref.html.twig.
         return $this->render('referent/newref.html.twig', [
             'referent' => $referent,
+            'referents' => $referentRepository->findReferentByOrder(),
             'form' => $form->createView(),
         ]);
     }
@@ -85,7 +88,7 @@ class ReferentController extends AbstractController
 
     #[Route ('/updateRef/{id}', name : 'updateRef')]
 
-    public function updateReferent(EntityManagerInterface $entityManager, Request $request, Referent $referent): Response
+    public function updateReferent(EntityManagerInterface $entityManager, Request $request, Referent $referent, ReferentRepository $referentRepository): Response
     {
 
         //On refuse l'accès a cette méthode a l'utilisateur si l'utilisateur n'a pas le rôle Admin.
@@ -106,6 +109,7 @@ class ReferentController extends AbstractController
         //On envoie les données sur la page editref.html.twig.
         return $this->render('referent/editref.html.twig', [
             'referent' => $referent,
+            'referents' => $referentRepository->findReferentByOrder(),
             'form' => $form->createView(),
         ]);
     }

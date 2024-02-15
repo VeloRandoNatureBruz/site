@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Activite;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -69,6 +70,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private  $referents;
 
     #[ORM\ManyToOne(targetEntity: Bureau::class, inversedBy: 'users')]
+    #[Assert\NotBlank(message: 'Veuillez choisir Adhérent')]
     private ?Bureau $bureau;
 
 
@@ -83,6 +85,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->activite = new ArrayCollection();
         $this->photos = new ArrayCollection();
         $this->referents = new ArrayCollection();
+
 
     }
 

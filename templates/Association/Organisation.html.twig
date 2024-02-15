@@ -45,7 +45,7 @@
 	<div class="container text-center">
 		<div class="row justify-content-center">
 			{% for user in users %}
-				{% if user.bureau is not null and user.bureau.getId() != 1 %}
+				{% if user.bureau is not null and user.bureau.getId() != 1 and user.bureau.getNom() != 'Adhérent'%}
 					<div class="col-md-6 mb-3">
 						<!-- Utilisation de Bootstrap pour diviser en deux colonnes -->
 						<div class="card mb-3">

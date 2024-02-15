@@ -44,16 +44,16 @@
 						<div class="col-lg-6 test-color-size2">
 							<p>L'ordre gère l'affichage des Référents.</p>
 							<div>
-								<strong>1 - </strong>Président
-								<br>
-								<strong>2 - </strong>Bureau
-								<br>
-								<strong>3 - </strong>Référents
-								<br>
-								<strong>4 - </strong>Adhérents
+								<ul>
+									{% for referent in referents %}
+										<li><strong>{{ referent.ordre }} - </strong>{{ referent.nom }}</li>
+									{% endfor %}
+								</ul>
 							</div>
 						</div>
 					</div>
+					<p>Afin de conserver un affichage cohérent,<br> veuillez ajouter un chiffre au-dessus
+						de l'ordre le plus élevé actuel pour ajouter un nouveau référent.</p>
 
 					{# Les boutons Enregistrer et Retour #}
 					<div class="col-lg-12 button-enregistrer-new-referent">

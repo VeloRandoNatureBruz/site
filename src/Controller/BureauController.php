@@ -29,7 +29,7 @@ class BureauController extends AbstractController
     }
 
     #[Route('/createBureau', name: 'createBureau')]
-    public function createBureau(Request $request): Response
+    public function createBureau(Request $request, BureauRepository $bureauRepository): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
@@ -47,12 +47,13 @@ class BureauController extends AbstractController
 
         return $this->render('bureau/newBureau.html.twig', [
             'bureau' => $bureau,
+            'bureaux' => $bureauRepository->findBureauxByOrder(),
             'form' => $form->createView(),
         ]);
     }
 
     #[Route('/updateBureau/{id}', name: 'updateBureau')]
-    public function updateBureau(Request $request, Bureau $bureau): Response
+    public function updateBureau(Request $request, Bureau $bureau, BureauRepository $bureauRepository): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
@@ -68,6 +69,7 @@ class BureauController extends AbstractController
 
         return $this->render('bureau/editBureau.html.twig', [
             'bureau' => $bureau,
+            'bureaux' => $bureauRepository->findBureauxByOrder(),
             'form' => $form->createView(),
         ]);
     }

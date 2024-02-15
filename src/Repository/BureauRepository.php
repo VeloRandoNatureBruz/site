@@ -34,6 +34,14 @@ class BureauRepository extends ServiceEntityRepository
 
    }
 
+   public function findBureauxByOrder()
+   {
+       return $this->createQueryBuilder('b')
+           ->orderBy('b.ordre', 'ASC')
+           ->getQuery()
+           ->getResult();
+   }
+
 //    /**
 //     * @return Bureau[] Returns an array of Bureau objects
 //     */

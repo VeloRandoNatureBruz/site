@@ -16,15 +16,7 @@ class BureauType extends AbstractType
     {
         $builder
             ->add('nom')
-            ->add('ordre', ChoiceType::class, [
-                'choices' => [
-                    '1' => 1,
-                    '2' => 2,
-                    '3' => 3,
-                    '4' => 4,
-
-                ],
-            ])
+            ->add('ordre')
         ;
     }
 
