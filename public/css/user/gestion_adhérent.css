@@ -12,8 +12,10 @@ margin-top: 120px;
 }
 .div-un-adherent{
     background-image:url("../../content/fond_adherent.jpg") ;
-    background-position: center;
+    background-position: center !important;
+    background-size: cover;
     background-repeat: no-repeat;
+    position: relative;
     color: black;
     font-weight: bold;
     border-radius: 10px;
@@ -21,6 +23,10 @@ margin-top: 120px;
     margin: 3%;
     height: 100%;
     width: 100%;
+}
+.interieur-div-un-adherent {
+    position: relative;
+    padding-bottom: 40px; /* Augmentez la marge en bas pour éviter le chevauchement avec les boutons */
 }
 .pseudo-div-un-adherent{
     font: oblique 40px "Freestyle Script";
@@ -33,5 +39,9 @@ margin-top: 120px;
     border-radius: 15px;
 }
 .button-div-modifier-profil-admin{
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    width: 100%;
     text-align: center;
 }
