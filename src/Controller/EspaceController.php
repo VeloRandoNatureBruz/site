@@ -52,12 +52,16 @@ class EspaceController extends AbstractController
             } else {
                 $photoIntroTrombi->setTrombiPhotoIntro($introPhoto);
             }
-            $entityManager->persist($photoIntroTrombi);
-            $entityManager->flush();
+            $this->entityManager->persist($photoIntroTrombi);
+            $this->entityManager->flush();
+
+
+
         }
         //On redirige l'utilisateur sur la page espace/index.html.twig.
         return $this->render('espace/index.html.twig', [
-            'users' => $userRepository->orderUserByReferentWithPhoto(),
+            'usersByBureau' => $userRepository->orderUserByBureauWithPhoto(),
+            'usersByReferent' => $userRepository->orderUserByReferentWithPhoto(),
             'photoIntro' => $photoIntroTrombi->getTrombiPhotoIntro(),
             'formPhotoIntro' => $formIntroTrombi->createView()
         ]);

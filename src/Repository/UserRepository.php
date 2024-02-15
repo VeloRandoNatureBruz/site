@@ -112,6 +112,20 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
             ->getResult();
     }
 
+    #On récupère la table User, Photo et la table Bureau #
+    #Ensuite on tris les users via le champ ordre de la table Bureau#
+    public function orderUserByBureauWithPhoto()
+    {
+            $query = $this->createQueryBuilder('u')
+                ->join('u.bureau', 'b')
+                ->addSelect('b')
+                ->leftJoin('u.photos', 'p')
+                ->addSelect('p')
+                ->orderBy('b.ordre', 'ASC');
+
+        return $query->getQuery()->getResult();
+    }
+
 
     // public function findUsers2()
     // {
