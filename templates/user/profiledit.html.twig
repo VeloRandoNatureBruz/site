@@ -52,7 +52,8 @@
 						<p>Bureau :
 							{{ form_widget(form.bureau) }}</p>
 						<p>Référent :
-							{{ form_widget(form.referents) }}</p>
+							{{ form_widget(form.referents, {'attr': {'class': 'referents-checkboxes'}}) }}
+						</p>
 
 
 						{# Sinon on lui cache #}
@@ -123,17 +124,18 @@
 	{# Script JavaScript pour limiter le choix des référents à 3 #}
 	<script>
 		document.addEventListener('DOMContentLoaded', function () {
-			var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+			var checkboxes = document.querySelectorAll('.referents-checkboxes input[type="checkbox"]');
 			var maxCheckboxes = 3;
 
 			checkboxes.forEach(function (checkbox) {
 				checkbox.addEventListener('change', function () {
-					var checkedCount = document.querySelectorAll('input[type="checkbox"]:checked').length;
+					var checkedCount = document.querySelectorAll('.referents-checkboxes input[type="checkbox"]:checked').length;
 					if (checkedCount > maxCheckboxes) {
 						this.checked = false;
 					}
 				});
 			});
 		});
+
 	</script>
 {% endblock %}
