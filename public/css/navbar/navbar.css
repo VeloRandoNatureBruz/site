@@ -47,11 +47,9 @@ header{
 .nav.link{
     width:350px;
 }
-@media (max-width: 768px) { /* Styles appliqués uniquement aux écrans de taille téléphone */
-    .navbar-collapse {
-        position: relative; /* Modifier la position */
-        top: 200%; /* Déplace la navbar vers le bas */
-    }
-}
 
+.navbar-collapse {
+
+    align-self: flex-start;
+}
 
