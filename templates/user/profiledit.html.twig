@@ -118,24 +118,30 @@
 	{% endif %}
 {% endblock %}
 
-{# on appelle la fonction javascript dans le dossier js de public #}
 {% block javascripts %}
+{#	On charge le script JavaScript pour limiter le choix des référents à 3#}
 	<script src="{{ asset('js/images.js') }}"></script>
-	{# Script JavaScript pour limiter le choix des référents à 3 #}
 	<script>
+		// Attend que le document soit entièrement chargé avant d'exécuter le script
 		document.addEventListener('DOMContentLoaded', function () {
+			// Sélectionne tous les éléments de type checkbox dans la classe "referents-checkboxes"
 			var checkboxes = document.querySelectorAll('.referents-checkboxes input[type="checkbox"]');
+			// Définit le nombre maximal de cases à cocher autorisées
 			var maxCheckboxes = 3;
 
+			// Pour chaque case à cocher, ajoute un écouteur d'événements pour détecter les changements
 			checkboxes.forEach(function (checkbox) {
 				checkbox.addEventListener('change', function () {
+					// Compte le nombre de cases cochées actuellement
 					var checkedCount = document.querySelectorAll('.referents-checkboxes input[type="checkbox"]:checked').length;
+					// Si le nombre de cases cochées dépasse la limite autorisée
 					if (checkedCount > maxCheckboxes) {
+						// Désactive la case cochée actuelle
 						this.checked = false;
 					}
 				});
 			});
 		});
-
 	</script>
 {% endblock %}
+

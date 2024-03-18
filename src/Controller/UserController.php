@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Photo;
 use App\Entity\User;
+use App\Form\AdminUserEditType;
 use App\Form\IntroPhoto\ProfilIntroPhotoType;
 use App\Form\UserType;
 use App\Repository\BureauRepository;
@@ -260,7 +261,7 @@ class UserController extends AbstractController
         $this->denyAccessUnlessGranted("ROLE_ADMIN");
 
         // Créer le formulaire en utilisant l'utilisateur à modifier
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(AdminUserEditType::class, $user);
 
 
         // Gérer la soumission du formulaire
@@ -268,9 +269,9 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Hasher le mot de passe s'il a été modifié
-            if ($form->get('password')->getData()) {
-                $user->setPassword($passwordHasher->hashPassword($user, $form->get('password')->getData()));
-            }
+//            if ($form->get('password')->getData()) {
+//                $user->setPassword($passwordHasher->hashPassword($user, $form->get('password')->getData()));
+//            }
 
             // Enregistrer les modifications dans la base de données
             $entityManager->flush();

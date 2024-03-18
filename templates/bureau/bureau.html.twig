@@ -22,7 +22,8 @@
                         </div>
                         <div class="col-lg-6 button-supprimer-modifier-referent">
                             <a class="btn btn-success" href="{{ path('updateBureau', {'id':bureau.id}) }}">Modifier</a>
-                            <a class="espace-button-referent btn btn-secondary" href="{{ path('deleteBureau', {'id':bureau.id}) }}" onclick="return confirm('Voulez-vous vraiment supprimer ce bureau ?')">Supprimer</a>
+                            <a class="espace-button-referent btn btn-secondary" href="{{ path('deleteBureau', {'id':bureau.id}) }}"
+                               onclick="return confirm('Voulez-vous vraiment supprimer ce bureau ?')">Supprimer</a>
                         </div>
                     </div>
                 </div>
