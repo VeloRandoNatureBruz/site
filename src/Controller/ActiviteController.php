@@ -18,7 +18,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 #[Route("/activite")]
@@ -177,7 +176,6 @@ class ActiviteController extends AbstractController
      * @return Response
      */
     #[\Symfony\Component\Routing\Attribute\Route('/detail/{id}', name : 'activite_detail', methods : ['GET'])]
-    #[IsGranted('is_granted(\'ROLE_ADMIN\') or is_granted(\'ROLE_USER\')')]
 
     public function detail(Activite $activite, IntroPhotoRepository $introPhotoRepository): Response
     {

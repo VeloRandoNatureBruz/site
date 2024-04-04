@@ -21,6 +21,8 @@ class BureauRepository extends ServiceEntityRepository
         parent::__construct($registry, Bureau::class);
     }
 
+    #On récupère la table Bureau#
+    #On envoie le resultat#
    public function findBureau()
    {
        $bureau = $this

@@ -137,9 +137,7 @@
 										{% if is_granted("ROLE_USER") %}
 											{% if is_granted("ROLE_ADMIN") %}
 												<a class="btn btn-success btn-sm" href="{{ path('activite_edit', {'id': activite.id}) }}">Modifier</a>
-												<a class="btn btn-warning btn-sm" href="{{ path('delete_activite', {'id': activite.id}) }}"
-												   onclick="return confirm('Voulez-vous vraiment supprimer cette activité?')">
-													Supprimer</a>
+												<a class="btn btn-warning btn-sm" href="{{ path('delete_activite', {'id': activite.id}) }}" onclick="return confirm('Voulez-vous vraiment supprimer cette activité?')">Supprimer</a>
 											{% endif %}
 											{% if (activite.users.contains(user)) %}
 												<a class="btn btn-secondary btn-sm" href="{{ path('activite_sedesister', {'id': activite.id}) }}">Se désister</a>

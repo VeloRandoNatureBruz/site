@@ -42,60 +42,35 @@
 				{% include 'activite/_filter.html.twig' with {form: form} only %}
 			</div>
 			<div class="col-lg-9 col-sm-12 col-xs-12">
-				<!-- Début de la division avec les classes de grille Bootstrap pour la mise en page -->
 				<div class="row flex-start">
-					<!-- Début d'une nouvelle ligne avec la classe "flex-start" pour aligner les éléments à gauche -->
 					<table class="table">
-						<!-- Début d'un tableau avec la classe Bootstrap "table" pour un affichage tabulaire -->
 						<thead>
-						<!-- En-tête du tableau -->
 						<tr>
-							<!-- Ligne d'en-tête -->
 							<th>Date</th>
-							<!-- Colonne pour la date -->
 							<th>Nom</th>
-							<!-- Colonne pour le nom de l'activité -->
 							<th>Catégorie</th>
-							<!-- Colonne pour la catégorie de l'activité -->
 							<th>Ville</th>
-							<!-- Colonne pour la ville de l'activité -->
 							<th>Actions</th>
-							<!-- Colonne pour les actions (boutons) -->
 						</tr>
 						</thead>
 						<tbody>
-						<!-- Corps du tableau -->
 						{% for activite in activites %}
-							<!-- Boucle sur les activités -->
 							{% if (activite.etat.libelle =="ouverte") or (activite.etat.libelle =="modifiée") %}
-								<!-- Condition pour filtrer les activités par leur état -->
 								<tr>
-									<!-- Nouvelle ligne du tableau pour chaque activité -->
 									<td>{{ activite.dateActivite()|format_datetime('full', 'short', locale='fr')}}</td>
-									<!-- Colonne pour afficher la date de l'activité -->
 									<td>{{ activite.nom }}</td>
-									<!-- Colonne pour afficher le nom de l'activité -->
 									<td>{{ activite.categoriesFormation().getLibelle() }}</td>
-									<!-- Colonne pour afficher la catégorie de l'activité -->
 									<td>{{ activite.lieu.nomVille|slice(0,20) }}</td>
-									<!-- Colonne pour afficher le nom de la ville de l'activité, tronqué à 20 caractères -->
 									<td>
-										<!-- Colonne pour les actions -->
 										<a class="btn btn-info btn-sm" href="{{ path('activite_detail', {'id': activite.id}) }}">Détails</a>
-										<!-- Bouton pour afficher les détails de l'activité -->
 									</td>
 								</tr>
 							{% endif %}
 						{% endfor %}
-						<!-- Fin de la boucle sur les activités -->
 						</tbody>
 					</table>
-					<!-- Fin du tableau -->
 				</div>
-				<!-- Fin de la division avec la classe "row" -->
 			</div>
-			<!-- Fin de la division avec les classes de grille Bootstrap -->
-
 		</div>
 	</div>
 
